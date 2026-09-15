@@ -55,41 +55,43 @@ function ParticleField() {
 function ParticleWorld() {
   const group = useRef<THREE.Group>(null);
 
-  // Get the page scroll progress
   const { scrollYProgress } = useScroll();
 
   useFrame(({ mouse, camera }, delta) => {
     if (!group.current) return;
 
     /*
-     * ==========================
+     * ==============================
      * MOUSE INTERACTION
-     * ==========================
+     * ==============================
      */
 
-    const targetX = mouse.y * 0.8;
-    const targetY = mouse.x * 1.2;
+    const mouseTargetX = mouse.y * 0.8;
+    const mouseTargetY = mouse.x * 1.2;
 
     group.current.rotation.x +=
-      (targetX - group.current.rotation.x) *
+      (mouseTargetX - group.current.rotation.x) *
       delta *
       2;
 
     group.current.rotation.y +=
-      (targetY - group.current.rotation.y) *
+      (mouseTargetY - group.current.rotation.y) *
       delta *
       2;
 
 
     /*
-     * ==========================
-     * SCROLL INTERACTION
-     * ==========================
+     * ==============================
+     * SCROLL
+     * ==============================
      */
 
     const scroll = scrollYProgress.get();
 
-    // Camera targets based on scroll
+    /*
+     * Camera movement
+     */
+
     const targetCameraX =
       Math.sin(scroll * Math.PI) * 0.7;
 
@@ -99,8 +101,6 @@ function ParticleWorld() {
     const targetCameraZ =
       5 - scroll * 1.2;
 
-
-    // Smooth camera movement
     camera.position.x = THREE.MathUtils.lerp(
       camera.position.x,
       targetCameraX,
